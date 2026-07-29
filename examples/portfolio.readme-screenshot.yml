@@ -10,10 +10,7 @@ server:
 capture:
   viewport: { width: 1280, height: 900 }
   target:
-    type: element
-    selector: "#landing-page-container"
-  mask:
-    - "#mouse-scroll-indicator"
+    type: viewport
   wait_for_animations: true
   reduced_motion: true
 
