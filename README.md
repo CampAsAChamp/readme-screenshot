@@ -10,7 +10,7 @@ Capture one or more themed Playwright screenshots and optionally blend them with
 2. Install consumer deps and run capture:
 
 ```bash
-npm install -g github:CampAsAChamp/readme-screenshot#v1.1
+npm install -g github:CampAsAChamp/readme-screenshot#v1.1.0
 pip install "diagonal-blend @ git+https://github.com/CampAsAChamp/DiagonalBlend.git@main"
 npx playwright install chromium
 readme-screenshot capture
@@ -21,7 +21,7 @@ readme-screenshot capture
 ```yaml
 jobs:
   screenshot:
-    uses: CampAsAChamp/readme-screenshot/.github/workflows/capture-and-commit.yml@v1.1
+    uses: CampAsAChamp/readme-screenshot/.github/workflows/capture-and-commit.yml@v1.1.0
     with:
       config: .readme-screenshot.yml
       file_pattern: src/assets/website_screenshot.png
@@ -179,9 +179,16 @@ node dist/cli.js validate --config examples/fastapi.readme-screenshot.yml
 
 ## Releasing
 
-Releases are tag-driven. When you push a `v*` tag, CI runs tests and creates a GitHub Release with generated notes.
+Releases are **tag-driven**, not automatic on every merge to `main`. Pushing a `v*` tag triggers [`.github/workflows/release.yml`](.github/workflows/release.yml), which:
 
-1. Bump `version` in [package.json](package.json) (and the CLI `--version` string in [src/cli.ts](src/cli.ts)).
+1. Runs the full test suite
+2. Validates both example configs
+3. Verifies the tag matches `version` in [package.json](package.json) via [`scripts/verify-release-version.mjs`](scripts/verify-release-version.mjs)
+4. Creates a GitHub Release with auto-generated notes
+
+To cut a release:
+
+1. Bump `version` in [package.json](package.json) and the CLI `--version` string in [src/cli.ts](src/cli.ts).
 2. Merge to `main`.
 3. Verify locally:
 
@@ -198,7 +205,17 @@ git push origin main
 git push origin v1.2.0
 ```
 
-The tag must match `package.json` semver (`v1.2.0` → `1.2.0`). Consumer repos can pin `github:CampAsAChamp/readme-screenshot#v1.2.0` and `.github/workflows/capture-and-commit.yml@v1.2.0`.
+The tag must match `package.json` semver (`v1.2.0` → `1.2.0`). Shorthand tags like `v1.2` also match `1.2.0`.
+
+Consumer repos pin the tag for installs and workflows:
+
+```bash
+npm install -g github:CampAsAChamp/readme-screenshot#v1.2.0
+```
+
+```yaml
+uses: CampAsAChamp/readme-screenshot/.github/workflows/capture-and-commit.yml@v1.2.0
+```
 
 ## License
 

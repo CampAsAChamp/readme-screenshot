@@ -18,7 +18,7 @@ on:
       readme_screenshot_ref:
         description: Git ref of readme-screenshot to install
         type: string
-        default: v1.1
+        default: v1.1.0
       diagonal_blend_ref:
         description: Git ref of DiagonalBlend to install
         type: string
