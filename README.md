@@ -39,14 +39,14 @@ readme-screenshot capture [--config .readme-screenshot.yml]
 
 ## Config overview
 
-| Section | Purpose |
-|---------|---------|
-| `output` | PNG path written in the consumer repo |
-| `server` | Optional build/prepare, start command with `{port}`, health URL |
+| Section   | Purpose                                                                     |
+| --------- | --------------------------------------------------------------------------- |
+| `output`  | PNG path written in the consumer repo                                       |
+| `server`  | Optional build/prepare, start command with `{port}`, health URL             |
 | `capture` | Viewport, target (`element` / `viewport` / `full_page`), masks, auth, clock |
-| `theme` | Theme modes and how to set them before React boot |
-| `blend` | Optional `diag_blend` step for multi-theme images |
-| `commit` | Message hint for CI workflows |
+| `theme`   | Theme modes and how to set them before React boot                           |
+| `blend`   | Optional `diag_blend` step for multi-theme images                           |
+| `commit`  | Message hint for CI workflows                                               |
 
 JSON Schema for editor autocomplete: [schema/readme-screenshot.schema.json](schema/readme-screenshot.schema.json).
 

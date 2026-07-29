@@ -1,6 +1,6 @@
-import { describe, expect, it } from "vitest"
+import { describe, expect, it } from "vitest";
 
-import { configSchema } from "../src/config.js"
+import { configSchema } from "../src/config.js";
 
 describe("configSchema", () => {
   it("accepts a portfolio-style blended config", () => {
@@ -30,10 +30,10 @@ describe("configSchema", () => {
         direction: "tl-br",
         blend_width: 150,
       },
-    })
+    });
 
-    expect(config.blend.enabled).toBe(true)
-  })
+    expect(config.blend.enabled).toBe(true);
+  });
 
   it("accepts a single-capture config without blend", () => {
     const config = configSchema.parse({
@@ -53,10 +53,10 @@ describe("configSchema", () => {
       blend: {
         enabled: false,
       },
-    })
+    });
 
-    expect(config.theme.modes).toEqual(["default"])
-  })
+    expect(config.theme.modes).toEqual(["default"]);
+  });
 
   it("rejects blend order that references unknown theme modes", () => {
     expect(() =>
@@ -82,6 +82,6 @@ describe("configSchema", () => {
           direction: "tl-br",
         },
       }),
-    ).toThrow()
-  })
-})
+    ).toThrow();
+  });
+});

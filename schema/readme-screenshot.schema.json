@@ -3,117 +3,219 @@
   "$id": "https://github.com/CampAsAChamp/readme-screenshot/schema/readme-screenshot.schema.json",
   "title": "readme-screenshot config",
   "type": "object",
-  "required": ["version", "output", "server", "capture", "theme"],
+  "required": [
+    "version",
+    "output",
+    "server",
+    "capture",
+    "theme"
+  ],
   "properties": {
-    "version": { "const": 1 },
-    "output": { "type": "string", "minLength": 1 },
+    "version": {
+      "const": 1
+    },
+    "output": {
+      "type": "string",
+      "minLength": 1
+    },
     "server": {
       "type": "object",
-      "required": ["start", "health_url"],
+      "required": [
+        "start",
+        "health_url"
+      ],
       "properties": {
-        "build": { "type": "string" },
-        "prepare": { "type": "string" },
-        "start": { "type": "string" },
-        "health_url": { "type": "string" },
-        "cwd": { "type": "string" },
+        "build": {
+          "type": "string"
+        },
+        "prepare": {
+          "type": "string"
+        },
+        "start": {
+          "type": "string"
+        },
+        "health_url": {
+          "type": "string"
+        },
+        "cwd": {
+          "type": "string"
+        },
         "env": {
           "type": "object",
-          "additionalProperties": { "type": "string" }
+          "additionalProperties": {
+            "type": "string"
+          }
         }
       }
     },
     "capture": {
       "type": "object",
-      "required": ["viewport", "target"],
+      "required": [
+        "viewport",
+        "target"
+      ],
       "properties": {
         "viewport": {
           "type": "object",
-          "required": ["width", "height"],
+          "required": [
+            "width",
+            "height"
+          ],
           "properties": {
-            "width": { "type": "integer", "minimum": 1 },
-            "height": { "type": "integer", "minimum": 1 }
+            "width": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "height": {
+              "type": "integer",
+              "minimum": 1
+            }
           }
         },
         "target": {
           "oneOf": [
             {
               "type": "object",
-              "required": ["type", "selector"],
+              "required": [
+                "type",
+                "selector"
+              ],
               "properties": {
-                "type": { "const": "element" },
-                "selector": { "type": "string" }
+                "type": {
+                  "const": "element"
+                },
+                "selector": {
+                  "type": "string"
+                }
               }
             },
             {
               "type": "object",
-              "required": ["type"],
-              "properties": { "type": { "const": "viewport" } }
+              "required": [
+                "type"
+              ],
+              "properties": {
+                "type": {
+                  "const": "viewport"
+                }
+              }
             },
             {
               "type": "object",
-              "required": ["type"],
-              "properties": { "type": { "const": "full_page" } }
+              "required": [
+                "type"
+              ],
+              "properties": {
+                "type": {
+                  "const": "full_page"
+                }
+              }
             }
           ]
         },
         "mask": {
           "type": "array",
-          "items": { "type": "string" }
+          "items": {
+            "type": "string"
+          }
         },
-        "wait_for_animations": { "type": "boolean" },
-        "reduced_motion": { "type": "boolean" },
-        "base_url": { "type": "string" },
+        "wait_for_animations": {
+          "type": "boolean"
+        },
+        "reduced_motion": {
+          "type": "boolean"
+        },
+        "base_url": {
+          "type": "string"
+        },
         "auth": {
           "type": "object",
-          "required": ["login_url", "password"],
+          "required": [
+            "login_url",
+            "password"
+          ],
           "properties": {
-            "login_url": { "type": "string" },
-            "password_field": { "type": "string" },
-            "password": { "type": "string" },
-            "wait_for": { "type": "string" }
+            "login_url": {
+              "type": "string"
+            },
+            "password_field": {
+              "type": "string"
+            },
+            "password": {
+              "type": "string"
+            },
+            "wait_for": {
+              "type": "string"
+            }
           }
         },
         "clock": {
           "type": "object",
-          "required": ["freeze"],
+          "required": [
+            "freeze"
+          ],
           "properties": {
-            "freeze": { "type": "string" },
-            "timezone": { "type": "string" }
+            "freeze": {
+              "type": "string"
+            },
+            "timezone": {
+              "type": "string"
+            }
           }
         }
       }
     },
     "theme": {
       "type": "object",
-      "required": ["modes"],
+      "required": [
+        "modes"
+      ],
       "properties": {
-        "storage_key": { "type": "string" },
-        "attribute": { "type": "string" },
+        "storage_key": {
+          "type": "string"
+        },
+        "attribute": {
+          "type": "string"
+        },
         "modes": {
           "type": "array",
           "minItems": 1,
-          "items": { "type": "string" }
+          "items": {
+            "type": "string"
+          }
         }
       }
     },
     "blend": {
       "type": "object",
       "properties": {
-        "enabled": { "type": "boolean" },
+        "enabled": {
+          "type": "boolean"
+        },
         "order": {
           "type": "array",
-          "items": { "type": "string" }
+          "items": {
+            "type": "string"
+          }
         },
         "direction": {
-          "enum": ["tl-br", "tr-bl"]
+          "enum": [
+            "tl-br",
+            "tr-bl"
+          ]
         },
-        "blend_width": { "type": "integer", "minimum": 1 }
+        "blend_width": {
+          "type": "integer",
+          "minimum": 1
+        }
       }
     },
     "commit": {
       "type": "object",
       "properties": {
-        "message": { "type": "string" }
+        "message": {
+          "type": "string"
+        }
       }
     }
   }

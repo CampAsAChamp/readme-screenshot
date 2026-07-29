@@ -1,9 +1,9 @@
-import { z } from "zod"
+import { z } from "zod";
 
 const viewportSchema = z.object({
   width: z.number().int().positive(),
   height: z.number().int().positive(),
-})
+});
 
 const targetSchema = z.discriminatedUnion("type", [
   z.object({
@@ -16,19 +16,19 @@ const targetSchema = z.discriminatedUnion("type", [
   z.object({
     type: z.literal("full_page"),
   }),
-])
+]);
 
 const authSchema = z.object({
   login_url: z.string().min(1),
   password_field: z.string().default("password"),
   password: z.string(),
   wait_for: z.string().optional(),
-})
+});
 
 const clockSchema = z.object({
   freeze: z.string().min(1),
   timezone: z.string().optional(),
-})
+});
 
 export const configSchema = z
   .object({
@@ -78,7 +78,7 @@ export const configSchema = z
           code: z.ZodIssueCode.custom,
           message: "blend.order must list at least two theme mode ids when blend.enabled is true",
           path: ["blend", "order"],
-        })
+        });
       } else {
         for (const mode of config.blend.order) {
           if (!config.theme.modes.includes(mode)) {
@@ -86,7 +86,7 @@ export const configSchema = z
               code: z.ZodIssueCode.custom,
               message: `blend.order references unknown theme mode "${mode}"`,
               path: ["blend", "order"],
-            })
+            });
           }
         }
       }
@@ -95,7 +95,7 @@ export const configSchema = z
           code: z.ZodIssueCode.custom,
           message: "blend.direction is required when blend.enabled is true",
           path: ["blend", "direction"],
-        })
+        });
       }
     }
 
@@ -104,21 +104,21 @@ export const configSchema = z
         code: z.ZodIssueCode.custom,
         message: "capture.target.selector is required for element targets",
         path: ["capture", "target", "selector"],
-      })
+      });
     }
 
-    const hasThemeOverride = config.theme.modes.some((mode) => mode !== "default")
+    const hasThemeOverride = config.theme.modes.some((mode) => mode !== "default");
     if (hasThemeOverride && (!config.theme.storage_key || !config.theme.attribute)) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         message: "theme.storage_key and theme.attribute are required when using themed captures",
         path: ["theme"],
-      })
+      });
     }
-  })
+  });
 
-export type ReadmeScreenshotConfig = z.infer<typeof configSchema>
+export type ReadmeScreenshotConfig = z.infer<typeof configSchema>;
 
-export const DEFAULT_CONFIG_PATH = ".readme-screenshot.yml"
+export const DEFAULT_CONFIG_PATH = ".readme-screenshot.yml";
 
-export const DIAGONAL_BLEND_GIT_URL = "git+https://github.com/CampAsAChamp/DiagonalBlend.git@main"
+export const DIAGONAL_BLEND_GIT_URL = "git+https://github.com/CampAsAChamp/DiagonalBlend.git@main";
