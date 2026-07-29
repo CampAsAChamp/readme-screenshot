@@ -15,7 +15,3 @@ export async function loadConfig(configPath: string = DEFAULT_CONFIG_PATH): Prom
   const parsed = parseYaml(raw);
   return configSchema.parse(parsed);
 }
-
-export function validateConfig(config: ReadmeScreenshotConfig): void {
-  configSchema.parse(config);
-}

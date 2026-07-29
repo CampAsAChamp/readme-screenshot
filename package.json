@@ -2,6 +2,7 @@
   "name": "readme-screenshot",
   "version": "1.0.0",
   "description": "Config-driven README screenshot capture with optional light/dark blend",
+  "license": "MIT",
   "type": "module",
   "bin": {
     "readme-screenshot": "./dist/cli.js"

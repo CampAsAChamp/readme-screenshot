@@ -121,4 +121,17 @@ export type ReadmeScreenshotConfig = z.infer<typeof configSchema>;
 
 export const DEFAULT_CONFIG_PATH = ".readme-screenshot.yml";
 
-export const DIAGONAL_BLEND_GIT_URL = "git+https://github.com/CampAsAChamp/DiagonalBlend.git@main";
+export const DIAGONAL_BLEND_REPO_URL = "git+https://github.com/CampAsAChamp/DiagonalBlend.git";
+
+export const DEFAULT_COMMIT_MESSAGE = "docs: update readme screenshot";
+
+export function diagonalBlendInstallSpec(ref = "main"): string {
+  return `diagonal-blend @ ${DIAGONAL_BLEND_REPO_URL}@${ref}`;
+}
+
+export function getCommitMessage(
+  config: ReadmeScreenshotConfig,
+  fallback = DEFAULT_COMMIT_MESSAGE,
+): string {
+  return config.commit?.message ?? fallback;
+}

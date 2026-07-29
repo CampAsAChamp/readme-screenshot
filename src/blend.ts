@@ -2,7 +2,7 @@ import { copyFile, mkdir } from "node:fs/promises";
 import { spawn } from "node:child_process";
 import { dirname, resolve } from "node:path";
 
-import type { ReadmeScreenshotConfig } from "./config.js";
+import { diagonalBlendInstallSpec, type ReadmeScreenshotConfig } from "./config.js";
 import { logStep } from "./load-config.js";
 
 export async function blendCaptures(
@@ -54,7 +54,7 @@ export async function blendCaptures(
     child.on("error", (error) => {
       reject(
         new Error(
-          `Failed to run diag_blend: ${error.message}. Install with: pip install "diagonal-blend @ git+https://github.com/CampAsAChamp/DiagonalBlend.git@main"`,
+          `Failed to run diag_blend: ${error.message}. Install with: pip install "${diagonalBlendInstallSpec()}"`,
         ),
       );
     });

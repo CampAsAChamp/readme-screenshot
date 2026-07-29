@@ -1,3 +1,4 @@
+# yaml-language-server: $schema=../schema/readme-screenshot.schema.json
 version: 1
 
 output: src/assets/website_screenshot.png

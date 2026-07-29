@@ -3,8 +3,8 @@
 import { Command } from "commander";
 
 import { runCapture } from "./capture.js";
-import { DEFAULT_CONFIG_PATH } from "./config.js";
-import { loadConfig, logStep, validateConfig } from "./load-config.js";
+import { DEFAULT_CONFIG_PATH, getCommitMessage } from "./config.js";
+import { loadConfig, logStep } from "./load-config.js";
 
 const program = new Command();
 
@@ -15,9 +15,17 @@ program
   .description("Validate a readme-screenshot config file")
   .option("-c, --config <path>", "Path to config file", DEFAULT_CONFIG_PATH)
   .action(async (options: { config: string }) => {
-    const config = await loadConfig(options.config);
-    validateConfig(config);
+    await loadConfig(options.config);
     logStep(`Config is valid: ${options.config}`);
+  });
+
+program
+  .command("commit-message")
+  .description("Print the commit message from config (for CI workflows)")
+  .option("-c, --config <path>", "Path to config file", DEFAULT_CONFIG_PATH)
+  .action(async (options: { config: string }) => {
+    const config = await loadConfig(options.config);
+    process.stdout.write(getCommitMessage(config));
   });
 
 program
@@ -26,7 +34,6 @@ program
   .option("-c, --config <path>", "Path to config file", DEFAULT_CONFIG_PATH)
   .action(async (options: { config: string }) => {
     const config = await loadConfig(options.config);
-    validateConfig(config);
     await runCapture(config, options.config);
   });
 
