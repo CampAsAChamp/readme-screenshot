@@ -8,7 +8,7 @@ server:
   health_url: "http://127.0.0.1:{port}/"
 
 capture:
-  viewport: { width: 1280, height: 900 }
+  viewport: { width: 1280, height: 600 }
   target:
     type: viewport
   wait_for_animations: true
