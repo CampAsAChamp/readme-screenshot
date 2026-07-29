@@ -8,7 +8,7 @@ import { loadConfig, logStep } from "./load-config.js";
 
 const program = new Command();
 
-program.name("readme-screenshot").description("Capture README screenshots from a config file").version("1.0.0");
+program.name("readme-screenshot").description("Capture README screenshots from a config file").version("1.1.0");
 
 program
   .command("validate")

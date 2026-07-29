@@ -177,6 +177,29 @@ node dist/cli.js validate --config examples/portfolio.readme-screenshot.yml
 node dist/cli.js validate --config examples/fastapi.readme-screenshot.yml
 ```
 
+## Releasing
+
+Releases are tag-driven. When you push a `v*` tag, CI runs tests and creates a GitHub Release with generated notes.
+
+1. Bump `version` in [package.json](package.json) (and the CLI `--version` string in [src/cli.ts](src/cli.ts)).
+2. Merge to `main`.
+3. Verify locally:
+
+```bash
+npm test
+npm run verify-release -- v1.2.0
+```
+
+4. Tag and push:
+
+```bash
+git tag v1.2.0
+git push origin main
+git push origin v1.2.0
+```
+
+The tag must match `package.json` semver (`v1.2.0` → `1.2.0`). Consumer repos can pin `github:CampAsAChamp/readme-screenshot#v1.2.0` and `.github/workflows/capture-and-commit.yml@v1.2.0`.
+
 ## License
 
 MIT — see [LICENSE](LICENSE).
