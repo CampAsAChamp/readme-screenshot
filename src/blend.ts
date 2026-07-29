@@ -52,7 +52,7 @@ export async function blendCaptures(
       stdio: "inherit",
     })
     child.on("error", (error) => {
-      reject(new Error(`Failed to run diag_blend: ${error.message}. Install with: pip install "diagonal-blend @ ${process.env.DIAGONAL_BLEND_GIT_URL ?? "git+https://github.com/CampAsAChamp/DiagonalBlend.git@67dc32c9a379"}"`))
+      reject(new Error(`Failed to run diag_blend: ${error.message}. Install with: pip install "diagonal-blend @ git+https://github.com/CampAsAChamp/DiagonalBlend.git@main"`))
     })
     child.on("close", (code) => {
       if (code === 0) {

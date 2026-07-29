@@ -22,7 +22,7 @@ on:
       diagonal_blend_ref:
         description: Git ref of DiagonalBlend to install
         type: string
-        default: 67dc32c9a379
+        default: main
       install_consumer_deps:
         description: Run npm ci / yarn install in the consumer repo before capture
         type: boolean

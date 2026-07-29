@@ -11,7 +11,7 @@ Capture one or more themed Playwright screenshots and optionally blend them with
 
 ```bash
 npm install -g github:CampAsAChamp/readme-screenshot#v1
-pip install "diagonal-blend @ git+https://github.com/CampAsAChamp/DiagonalBlend.git@67dc32c9a379"
+pip install "diagonal-blend @ git+https://github.com/CampAsAChamp/DiagonalBlend.git@main"
 npx playwright install chromium
 readme-screenshot capture
 ```

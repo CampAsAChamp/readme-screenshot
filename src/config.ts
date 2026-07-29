@@ -121,5 +121,4 @@ export type ReadmeScreenshotConfig = z.infer<typeof configSchema>
 
 export const DEFAULT_CONFIG_PATH = ".readme-screenshot.yml"
 
-export const DIAGONAL_BLEND_GIT_URL =
-  "git+https://github.com/CampAsAChamp/DiagonalBlend.git@67dc32c9a379"
+export const DIAGONAL_BLEND_GIT_URL = "git+https://github.com/CampAsAChamp/DiagonalBlend.git@main"
