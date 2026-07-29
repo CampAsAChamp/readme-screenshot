@@ -1,0 +1,87 @@
+name: Capture and commit
+
+on:
+  workflow_call:
+    inputs:
+      config:
+        description: Path to readme-screenshot config file
+        type: string
+        default: .readme-screenshot.yml
+      commit_message:
+        description: Commit message when the screenshot changes
+        type: string
+        default: "docs: update readme screenshot"
+      file_pattern:
+        description: File path to commit (output from config)
+        type: string
+        required: true
+      readme_screenshot_ref:
+        description: Git ref of readme-screenshot to install
+        type: string
+        default: v1
+      diagonal_blend_ref:
+        description: Git ref of DiagonalBlend to install
+        type: string
+        default: 67dc32c9a379
+      install_consumer_deps:
+        description: Run npm ci / yarn install in the consumer repo before capture
+        type: boolean
+        default: true
+      node_version:
+        description: Node.js version for capture
+        type: string
+        default: "22"
+      python_version:
+        description: Python version for diag_blend
+        type: string
+        default: "3.12"
+
+permissions:
+  contents: write
+
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout consumer repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ inputs.node_version }}
+
+      - name: Install consumer dependencies
+        if: inputs.install_consumer_deps
+        run: |
+          if [ -f yarn.lock ]; then
+            corepack enable
+            yarn install --immutable
+          elif [ -f package-lock.json ]; then
+            npm ci
+          else
+            echo "No lockfile found; skipping consumer dependency install"
+          fi
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ inputs.python_version }}
+
+      - name: Install readme-screenshot CLI
+        run: npm install -g "github:CampAsAChamp/readme-screenshot#${{ inputs.readme_screenshot_ref }}"
+
+      - name: Install DiagonalBlend CLI
+        run: pip install "diagonal-blend @ git+https://github.com/CampAsAChamp/DiagonalBlend.git@${{ inputs.diagonal_blend_ref }}"
+
+      - name: Install Playwright Chromium
+        run: npx playwright install chromium --with-deps
+
+      - name: Capture screenshot
+        run: readme-screenshot capture --config "${{ inputs.config }}"
+
+      - name: Commit screenshot
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: ${{ inputs.commit_message }}
+          file_pattern: ${{ inputs.file_pattern }}
