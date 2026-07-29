@@ -6,7 +6,7 @@ Capture one or more themed Playwright screenshots and optionally blend them with
 
 ## Quick start
 
-1. Add `.readme-screenshot.yml` to your repo (see [examples/portfolio.readme-screenshot.yml](examples/portfolio.readme-screenshot.yml)).
+1. Add `.readme-screenshot.yml` to your repo (see [examples/portfolio.readme-screenshot.yml](examples/portfolio.readme-screenshot.yml) or [examples/fastapi.readme-screenshot.yml](examples/fastapi.readme-screenshot.yml) for Python web apps).
 2. Install consumer deps and run capture:
 
 ```bash
@@ -26,6 +26,7 @@ jobs:
       config: .readme-screenshot.yml
       commit_message: "docs: update readme screenshot"
       file_pattern: src/assets/website_screenshot.png
+      pip_requirements: "requirements.txt requirements-dev.txt"  # optional, for Python apps
     permissions:
       contents: write
 ```

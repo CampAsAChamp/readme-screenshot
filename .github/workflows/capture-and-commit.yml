@@ -35,6 +35,10 @@ on:
         description: Python version for diag_blend
         type: string
         default: "3.12"
+      pip_requirements:
+        description: Space-separated requirements files to pip install before capture
+        type: string
+        default: ""
 
 permissions:
   contents: write
@@ -67,6 +71,16 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: ${{ inputs.python_version }}
+
+      - name: Install Python requirements
+        if: inputs.pip_requirements != ''
+        run: |
+          set -euo pipefail
+          args=()
+          for file in ${{ inputs.pip_requirements }}; do
+            args+=(-r "$file")
+          done
+          pip install "${args[@]}"
 
       - name: Install readme-screenshot CLI
         run: npm install -g "github:CampAsAChamp/readme-screenshot#${{ inputs.readme_screenshot_ref }}"
