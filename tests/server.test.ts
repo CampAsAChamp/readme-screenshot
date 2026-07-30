@@ -46,19 +46,23 @@ describe("waitForHealth", () => {
 });
 
 describe("stopServer", () => {
-  it("stops a long-running shell process tree promptly", async () => {
-    const proc = startServer("sleep 300", process.cwd(), process.env);
+  it(
+    "stops a long-running shell process tree promptly",
+    async () => {
+      const proc = startServer("sleep 300", process.cwd(), process.env);
 
-    const stoppedInMs = await new Promise<number>((resolve, reject) => {
-      const startedAt = Date.now();
-      stopServer(proc)
-        .then(() => resolve(Date.now() - startedAt))
-        .catch(reject);
-    });
+      const stoppedInMs = await new Promise<number>((resolve, reject) => {
+        const startedAt = Date.now();
+        stopServer(proc)
+          .then(() => resolve(Date.now() - startedAt))
+          .catch(reject);
+      });
 
-    expect(stoppedInMs).toBeLessThan(6_000);
-    expect(proc.exitCode !== null || proc.signalCode !== null).toBe(true);
-  });
+      expect(stoppedInMs).toBeLessThan(6_000);
+      expect(proc.exitCode !== null || proc.signalCode !== null).toBe(true);
+    },
+    12_000,
+  );
 
   it("is a no-op when the process already exited", async () => {
     const proc = spawn("true", { shell: true });

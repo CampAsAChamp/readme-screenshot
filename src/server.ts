@@ -38,6 +38,13 @@ function killProcessTree(proc: ChildProcess, signal: NodeJS.Signals): void {
     return;
   }
 
+  try {
+    process.kill(-pid, signal);
+    return;
+  } catch {
+    // Fall through when the process is not a group leader.
+  }
+
   const sigName = signal === "SIGKILL" ? "KILL" : "TERM";
   spawn("pkill", [`-${sigName}`, "-P", String(pid)], { stdio: "ignore" });
 
@@ -130,6 +137,7 @@ export function startServer(command: string, cwd: string, env: NodeJS.ProcessEnv
     cwd,
     env,
     shell: true,
+    detached: process.platform !== "win32",
     stdio: ["ignore", "pipe", "pipe"],
   });
 
