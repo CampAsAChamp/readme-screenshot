@@ -1,7 +1,7 @@
 import { spawn, type ChildProcess } from "node:child_process";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-import { findFreePort, interpolatePort, waitForHealth } from "../src/server.js";
+import { findFreePort, interpolatePort, startServer, stopServer, waitForHealth } from "../src/server.js";
 
 describe("interpolatePort", () => {
   it("replaces all {port} placeholders", () => {
@@ -42,5 +42,28 @@ describe("waitForHealth", () => {
     await expect(waitForHealth("http://127.0.0.1:9999/healthz", proc)).rejects.toThrow(
       /Server exited before becoming ready/,
     );
+  });
+});
+
+describe("stopServer", () => {
+  it("stops a long-running shell process tree promptly", async () => {
+    const proc = startServer("sleep 300", process.cwd(), process.env);
+
+    const stoppedInMs = await new Promise<number>((resolve, reject) => {
+      const startedAt = Date.now();
+      stopServer(proc)
+        .then(() => resolve(Date.now() - startedAt))
+        .catch(reject);
+    });
+
+    expect(stoppedInMs).toBeLessThan(6_000);
+    expect(proc.exitCode !== null || proc.signalCode !== null).toBe(true);
+  });
+
+  it("is a no-op when the process already exited", async () => {
+    const proc = spawn("true", { shell: true });
+    await new Promise<void>((resolve) => proc.on("close", () => resolve()));
+
+    await expect(stopServer(proc)).resolves.toBeUndefined();
   });
 });

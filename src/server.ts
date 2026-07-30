@@ -1,10 +1,52 @@
-import { createServer } from "node:net";
 import { spawn, type ChildProcess } from "node:child_process";
+import { createServer } from "node:net";
+import type { Readable } from "node:stream";
 
 import { logStep } from "./load-config.js";
 
 const HEALTH_POLL_INTERVAL_MS = 250;
 const HEALTH_TIMEOUT_MS = 60_000;
+const SERVER_STOP_TIMEOUT_MS = 5_000;
+
+function drainStream(stream: Readable | null | undefined): void {
+  stream?.resume();
+  stream?.on("data", () => {
+    // Discard server output so pipe buffers cannot fill and block shutdown.
+  });
+}
+
+function killProcessTree(proc: ChildProcess, signal: NodeJS.Signals): void {
+  const pid = proc.pid;
+  if (!pid) {
+    return;
+  }
+
+  if (process.platform === "win32") {
+    const args = ["/PID", String(pid), "/T"];
+    if (signal === "SIGKILL") {
+      args.push("/F");
+    }
+
+    try {
+      spawn("taskkill", args, {
+        shell: true,
+        stdio: "ignore",
+      });
+    } catch {
+      proc.kill(signal);
+    }
+    return;
+  }
+
+  const sigName = signal === "SIGKILL" ? "KILL" : "TERM";
+  spawn("pkill", [`-${sigName}`, "-P", String(pid)], { stdio: "ignore" });
+
+  try {
+    proc.kill(signal);
+  } catch {
+    // Process may already be gone.
+  }
+}
 
 export function findFreePort(): Promise<number> {
   return new Promise((resolve, reject) => {
@@ -84,29 +126,54 @@ export async function waitForHealth(url: string, proc: ChildProcess): Promise<vo
 
 export function startServer(command: string, cwd: string, env: NodeJS.ProcessEnv): ChildProcess {
   logStep(`Starting server: ${command}`);
-  return spawn(command, {
+  const proc = spawn(command, {
     cwd,
     env,
     shell: true,
     stdio: ["ignore", "pipe", "pipe"],
   });
+
+  drainStream(proc.stdout);
+  drainStream(proc.stderr);
+
+  return proc;
 }
 
 export async function stopServer(proc: ChildProcess): Promise<void> {
-  if (proc.exitCode !== null) {
+  if (proc.exitCode !== null || proc.signalCode !== null) {
     return;
   }
 
-  proc.kill("SIGTERM");
   await new Promise<void>((resolve) => {
-    const timeout = setTimeout(() => {
-      proc.kill("SIGKILL");
-      resolve();
-    }, 5_000);
+    let settled = false;
+    let graceTimeout: NodeJS.Timeout | undefined;
+    let absoluteTimeout: NodeJS.Timeout | undefined;
 
-    proc.on("close", () => {
-      clearTimeout(timeout);
+    const finish = (): void => {
+      if (settled) {
+        return;
+      }
+      settled = true;
+      clearTimeout(graceTimeout);
+      clearTimeout(absoluteTimeout);
       resolve();
-    });
+    };
+
+    proc.once("close", finish);
+
+    if (proc.exitCode !== null) {
+      finish();
+      return;
+    }
+
+    killProcessTree(proc, "SIGTERM");
+
+    graceTimeout = setTimeout(() => {
+      killProcessTree(proc, "SIGKILL");
+    }, SERVER_STOP_TIMEOUT_MS);
+
+    absoluteTimeout = setTimeout(() => {
+      finish();
+    }, SERVER_STOP_TIMEOUT_MS * 2);
   });
 }
