@@ -18,7 +18,7 @@ on:
       readme_screenshot_ref:
         description: Git ref of readme-screenshot to install
         type: string
-        default: v1.1.0
+        default: v1.1.1
       diagonal_blend_ref:
         description: Git ref of DiagonalBlend to install
         type: string
@@ -83,7 +83,13 @@ jobs:
           pip install "${args[@]}"
 
       - name: Install readme-screenshot CLI
-        run: npm install -g "github:CampAsAChamp/readme-screenshot#${{ inputs.readme_screenshot_ref }}"
+        run: |
+          set -euo pipefail
+          git clone --depth 1 --branch "${{ inputs.readme_screenshot_ref }}" \
+            https://github.com/CampAsAChamp/readme-screenshot.git /tmp/readme-screenshot
+          cd /tmp/readme-screenshot
+          npm ci
+          npm link
 
       - name: Install DiagonalBlend CLI
         # Matches DIAGONAL_BLEND_REPO_URL in src/config.ts

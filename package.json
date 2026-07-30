@@ -1,6 +1,6 @@
 {
   "name": "readme-screenshot",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Config-driven README screenshot capture with optional light/dark blend",
   "license": "MIT",
   "type": "module",
