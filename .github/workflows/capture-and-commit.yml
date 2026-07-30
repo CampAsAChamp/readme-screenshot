@@ -18,7 +18,7 @@ on:
       readme_screenshot_ref:
         description: Git ref of readme-screenshot to install
         type: string
-        default: v1.1.1
+        default: v1.1.2
       diagonal_blend_ref:
         description: Git ref of DiagonalBlend to install
         type: string
@@ -96,6 +96,7 @@ jobs:
         run: pip install "diagonal-blend @ git+https://github.com/CampAsAChamp/DiagonalBlend.git@${{ inputs.diagonal_blend_ref }}"
 
       - name: Install Playwright Chromium
+        working-directory: /tmp/readme-screenshot
         run: npx playwright install chromium --with-deps
 
       - name: Capture screenshot
