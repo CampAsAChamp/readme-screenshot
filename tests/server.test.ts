@@ -5,9 +5,7 @@ import { findFreePort, interpolatePort, startServer, stopServer, waitForHealth }
 
 describe("interpolatePort", () => {
   it("replaces all {port} placeholders", () => {
-    expect(interpolatePort("http://127.0.0.1:{port}/health", 3456)).toBe(
-      "http://127.0.0.1:3456/health",
-    );
+    expect(interpolatePort("http://127.0.0.1:{port}/health", 3456)).toBe("http://127.0.0.1:3456/health");
     expect(interpolatePort("yarn preview --port {port} --host {port}", 8080)).toBe(
       "yarn preview --port 8080 --host 8080",
     );
@@ -46,23 +44,19 @@ describe("waitForHealth", () => {
 });
 
 describe("stopServer", () => {
-  it(
-    "stops a long-running shell process tree promptly",
-    async () => {
-      const proc = startServer("sleep 300", process.cwd(), process.env);
+  it("stops a long-running shell process tree promptly", async () => {
+    const proc = startServer("sleep 300", process.cwd(), process.env);
 
-      const stoppedInMs = await new Promise<number>((resolve, reject) => {
-        const startedAt = Date.now();
-        stopServer(proc)
-          .then(() => resolve(Date.now() - startedAt))
-          .catch(reject);
-      });
+    const stoppedInMs = await new Promise<number>((resolve, reject) => {
+      const startedAt = Date.now();
+      stopServer(proc)
+        .then(() => resolve(Date.now() - startedAt))
+        .catch(reject);
+    });
 
-      expect(stoppedInMs).toBeLessThan(6_000);
-      expect(proc.exitCode !== null || proc.signalCode !== null).toBe(true);
-    },
-    12_000,
-  );
+    expect(stoppedInMs).toBeLessThan(6_000);
+    expect(proc.exitCode !== null || proc.signalCode !== null).toBe(true);
+  }, 12_000);
 
   it("is a no-op when the process already exited", async () => {
     const proc = spawn("true", { shell: true });
