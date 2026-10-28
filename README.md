@@ -1,8 +1,24 @@
-# readme-screenshot
+<!-- PROJECT LOGO -->
+<br />
+<div align="center">
+  <a href="https://github.com/CampAsAChamp/readme-screenshot">
+    <img src="docs/logo.svg" alt="readme-screenshot logo" width="96" height="96">
+  </a>
 
-Config-driven README screenshot automation for static sites and web apps.
+<h3 align="center">readme-screenshot</h3>
 
-Capture one or more themed Playwright screenshots and optionally blend them with [DiagonalBlend](https://github.com/CampAsAChamp/DiagonalBlend) for light/dark README hero images.
+  <p align="center">
+    Config-driven README screenshot automation for static sites and web apps.
+    <br />
+    Capture themed Playwright screenshots and optionally blend them with
+    <a href="https://github.com/CampAsAChamp/DiagonalBlend">DiagonalBlend</a>
+    for light/dark README hero images.
+  </p>
+</div>
+
+<p align="center">
+  <img src="docs/example-screenshot.png" alt="Example light/dark blended README screenshot" width="800">
+</p>
 
 ## Quick start
 
